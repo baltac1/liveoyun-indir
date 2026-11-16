@@ -4,6 +4,8 @@ TikTok LIVE yayınların için interaktif oyunlar: Halay, Viyana'yı Fethet, Kö
 
 **İndir:** [LIVEoyun-Kurulum.exe](https://github.com/baltac1/liveoyun-indir/releases/latest/download/LIVEoyun-Kurulum.exe)
 
+**Videolu kurulum rehberi:** https://baltac1.github.io/liveoyun-indir/rehber/
+
 - Windows 10 veya 11 gerekir.
 - Kurulumdan sonra uygulamada ürün anahtarını gir. Anahtar, liveoyun.shop'tan satın aldıktan sonra e-postana gelir.
 - Windows "bilinmeyen yayıncı" uyarısı gösterirse "Ek bilgi" → "Yine de çalıştır" seçeneğine tıkla.
