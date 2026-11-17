@@ -18,10 +18,11 @@
 <meta property="og:image" content="https://liveoyun.shop/img/og-liveoyun.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="/assets/site.css">
+<script>try{localStorage.setItem('liveoyun-t','1');localStorage.removeItem('liveoyun-t');document.documentElement.className+=' has-cart';}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#icerik">İçeriğe geç</a>
-<div class="topbar"><a href="/oyunlar/paket/">3&#x27;lü Pakette 3 oyun 26$ — tek tek almaktan 13$ daha uygun</a></div>
+<div class="topbar"><a href="/sepet/">2 al 1 hediye: Sepete herhangi 3 oyun ekle, 3.sü bedava</a></div>
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="/" aria-label="LIVEoyun ana sayfa">LIVE<span>oyun</span></a>
@@ -30,6 +31,7 @@
       <a href="/#nasil-calisir">Nasıl Çalışır</a>
       <a href="/#sss">SSS</a>
       <a href="/rehber/">Kurulum Rehberi</a>
+      <a class="cart-link cart-only" href="/sepet/">Sepet <span class="cart-count" aria-live="polite"><span data-cart-n>0</span><span class="sr"> oyun</span></span></a>
     </nav>
   </div>
 </header>
@@ -58,7 +60,9 @@
     <p>Ödeme dolar ($) cinsinden alındığı için, iade edilen TL tutarı kur değişimine ve bankanın uyguladığı yurt dışı işlem ücretine göre ödediğin tutardan biraz farklı olabilir.</p>
     <h2>6. İade edilen siparişin anahtarı kapanır</h2>
     <p>İade tamamlandığında o siparişe ait ürün anahtarı (ya da sipariş bir mevcut anahtarı uzattıysa, o siparişle eklenen süre/oyun) devre dışı kalır.</p>
-    <h2>7. Sorun mu var?</h2>
+    <h2>7. 2 al 1 hediye siparişleri</h2>
+    <p>2 al 1 hediye kampanyasıyla verilen siparişte hediye oyun ayrıca satılmadığı için tek başına iade edilmez. İade, siparişin tamamı için ödediğin tutar üzerinden yapılır ve iade edilen siparişteki bütün oyunların (hediye oyun dahil) anahtarı kapanır.</p>
+    <h2>8. Sorun mu var?</h2>
     <p>Kartından itiraz (chargeback) başlatmadan önce lütfen bize yaz; çoğu sorunu hızlıca çözebiliriz. İletişim: <a href="mailto:destek@liveoyun.shop">destek@liveoyun.shop</a></p>
   </div>
 </section>
@@ -75,11 +79,12 @@
         <h2>Oyunlar</h2>
         <ul>
           <li><a href="/oyunlar/halay/">Halay</a></li>
-          <li><a href="/oyunlar/viyana/">Viyana'yı Fethet</a></li>
+          <li><a href="/oyunlar/viyana/">Viyana&#x27;yı Fethet</a></li>
           <li><a href="/oyunlar/slime/">Köy Evinde Slime</a></li>
           <li><a href="/oyunlar/sokak/">Sokak Yarışı</a></li>
           <li><a href="/oyunlar/at/">At Yarışı</a></li>
-          <li><a href="/oyunlar/paket/">3'lü Paket</a></li>
+          <li><a href="/oyunlar/bocek/">Böcek Yarışı</a></li>
+          <li><a href="/sepet/">2 al 1 hediye</a></li>
           <li><a href="/rehber/">Kurulum Rehberi</a></li>
         </ul>
       </div>
@@ -101,5 +106,136 @@
     </div>
   </div>
 </footer>
+<script>
+(function () {
+  var KEY = 'liveoyun-sepet', BUY = "https://lisans.liveoyun.shop/satin-al/", G = {"halay": {"n": "Halay", "img": "/img/kart-halay.jpg", "u": "/oyunlar/halay/"}, "viyana": {"n": "Viyana'yı Fethet", "img": "/img/kart-viyana.jpg", "u": "/oyunlar/viyana/"}, "slime": {"n": "Köy Evinde Slime", "img": "/img/kart-slime.jpg", "u": "/oyunlar/slime/"}, "sokak": {"n": "Sokak Yarışı", "img": "/img/kart-sokak.jpg", "u": "/oyunlar/sokak/"}, "at": {"n": "At Yarışı", "img": "/img/kart-at.jpg", "u": "/oyunlar/at/"}, "bocek": {"n": "Böcek Yarışı", "img": "/img/kart-bocek.jpg", "u": "/oyunlar/bocek/"}}, ORDER = ["halay", "viyana", "slime", "sokak", "at", "bocek"], PRICE = 13, RATE = 50.4;
+  function read() {
+    var raw, v;
+    try { raw = localStorage.getItem(KEY); } catch (e) { return null; }
+    try { v = JSON.parse(raw || '[]'); } catch (e) { return []; }
+    if (!Array.isArray(v)) return [];
+    return v.filter(function (s, i) { return ORDER.indexOf(s) !== -1 && v.indexOf(s) === i; });
+  }
+  function write(list) {
+    try { localStorage.setItem(KEY, JSON.stringify(list)); return true; } catch (e) { return false; }
+  }
+  if (read() === null || !write(read())) {
+    try { document.documentElement.className = document.documentElement.className.replace(/\bhas-cart\b/g, ''); } catch (e) {}
+    return;
+  }
+  function paid(n) { return n - Math.floor(n / 3); }
+  function usd(n) { return n + '$'; }
+  function tl(u) { return '≈ ' + String(Math.round(u * RATE)).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' TL'; }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function checkoutUrl(list) { return list.length === 1 ? BUY + list[0] : BUY + 'sepet?oyunlar=' + list.join(','); }
+
+  function sync() {
+    var list = read() || [], n = list.length;
+    document.querySelectorAll('[data-cart-n]').forEach(function (e) { e.textContent = n; });
+    document.querySelectorAll('.cart-link').forEach(function (e) { e.classList.toggle('full', n > 0); });
+    document.querySelectorAll('[data-add]').forEach(function (b) {
+      var inCart = list.indexOf(b.getAttribute('data-add')) !== -1;
+      b.textContent = inCart ? 'Sepette ✓' : 'Sepete Ekle';
+      var gn = G[b.getAttribute('data-add')];
+      if (gn) b.setAttribute('aria-label', inCart ? gn.n + ' sepette, sepete git' : gn.n + ' sepete ekle');
+      b.classList.toggle('in', inCart);
+    });
+    renderCart(list);
+  }
+
+  function hint(list) {
+    var n = list.length, left = ORDER.filter(function (s) { return list.indexOf(s) === -1; }).length;
+    if (n % 3 === 2 && left) return 'Bir oyun daha ekle, bedava!';
+    if (n % 3 === 0) return 'Bir oyun hediye oldu!';
+    return '';
+  }
+
+  function add(slug, btn) {
+    var list = read() || [];
+    var note = btn && btn.parentNode ? btn.parentNode.querySelector('.added') : null;
+    if (list.indexOf(slug) !== -1) { location.href = '/sepet/'; return; }
+    list.push(slug);
+    if (!write(list)) {
+      if (note) { note.textContent = 'Sepet bu tarayıcıda çalışmıyor. “Hemen Al” ile tek oyunu satın alabilirsin.'; }
+      return;
+    }
+    if (note) {
+      note.textContent = '';
+      note.appendChild(document.createTextNode('Sepete eklendi. ' + hint(list) + ' '));
+      var a = el('a', '', 'Sepete git →'); a.href = '/sepet/'; note.appendChild(a);
+    }
+    sync();
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-add]') : null;
+    if (b) { e.preventDefault(); add(b.getAttribute('data-add'), b); return; }
+    var r = e.target.closest ? e.target.closest('[data-remove]') : null;
+    if (r) {
+      var s = r.getAttribute('data-remove');
+      var list = (read() || []).filter(function (x) { return x !== s; });
+      write(list); sync();
+      var focus = document.getElementById('cart-items');
+      if (focus) { focus.setAttribute('tabindex', '-1'); focus.focus(); }
+    }
+  });
+  window.addEventListener('storage', function (e) { if (e.key === KEY) sync(); });
+
+  function renderCart(list) {
+    var box = document.getElementById('cart');
+    if (!box) return;
+    var n = list.length, items = document.getElementById('cart-items'), sum = document.getElementById('cart-summary'),
+        empty = document.getElementById('cart-empty'), nudge = document.getElementById('cart-nudge');
+    items.textContent = ''; nudge.textContent = '';
+    empty.hidden = n > 0; sum.hidden = n === 0; items.hidden = n === 0;
+    list.forEach(function (s, i) {
+      var free = (i + 1) % 3 === 0, g = G[s];
+      var li = el('li', free ? 'free' : '');
+      var img = el('img'); img.src = g.img; img.alt = ''; img.width = 160; img.height = 90; img.loading = 'lazy';
+      var info = el('div', 'info');
+      var name = el('a', 'name', g.n); name.href = g.u;
+      info.appendChild(name);
+      info.appendChild(el('span', 'meta', '1 haftalık lisans · 1 bilgisayar'));
+      var price = el('div', 'line-price');
+      if (free) { price.appendChild(el('s', '', usd(PRICE))); price.appendChild(el('b', 'gift', 'Hediye')); }
+      else price.appendChild(el('b', '', usd(PRICE)));
+      var rm = el('button', 'rm', 'Kaldır'); rm.type = 'button'; rm.setAttribute('data-remove', s); rm.setAttribute('aria-label', g.n + ' sepetten kaldır');
+      li.appendChild(img); li.appendChild(info); li.appendChild(price); li.appendChild(rm);
+      items.appendChild(li);
+    });
+    nudge.hidden = true;
+    var rest = ORDER.filter(function (s) { return list.indexOf(s) === -1; });
+    if (n % 3 === 2 && rest.length) {
+      nudge.hidden = false;
+      nudge.appendChild(el('p', 'nudge-title', 'Bir oyun daha ekle, bedava!'));
+      var row = el('div', 'quick');
+      rest.forEach(function (s) {
+        var b = el('button', 'btn sm ghost', '+ ' + G[s].n); b.type = 'button';
+        b.addEventListener('click', function () { var l = read() || []; if (l.indexOf(s) === -1) { l.push(s); write(l); sync(); } var f = document.getElementById('cart-items'); if (f) { f.setAttribute('tabindex', '-1'); f.focus(); } });
+        row.appendChild(b);
+      });
+      nudge.appendChild(row);
+    } else if (n % 3 === 1 && rest.length >= 2) {
+      nudge.hidden = false;
+      nudge.appendChild(el('p', 'nudge-title', '2 oyun daha eklersen 3.sü bedava.'));
+      var more = el('a', '', 'Oyunlara bak →'); more.href = '/#oyunlar'; nudge.appendChild(more);
+    }
+    var p = paid(n), freeN = n - p, dl = document.getElementById('cart-lines');
+    dl.textContent = '';
+    function line(k, v, cls) { var r = el('div', cls || ''); r.appendChild(el('dt', '', k)); r.appendChild(el('dd', '', v)); dl.appendChild(r); }
+    line('Ara toplam (' + n + ' oyun)', usd(n * PRICE));
+    list.forEach(function (s, i) { if ((i + 1) % 3 === 0) line('2 al 1 hediye: ' + G[s].n, '-' + usd(PRICE), 'disc'); });
+    line('Toplam', usd(p * PRICE), 'total');
+    document.getElementById('cart-tl').textContent = tl(p * PRICE) + ' · KDV dahil';
+    document.getElementById('cart-qty').textContent = freeN
+      ? 'Ödeme sayfasında adet: ' + p + ' (ödediğin oyun sayısı). ' + freeN + ' hediye oyun buna dahil.'
+      : 'Ödeme sayfasında adet: ' + p + '.';
+    var go = document.getElementById('cart-go');
+    go.href = checkoutUrl(list);
+  }
+
+  sync();
+})();
+</script>
 </body>
 </html>
