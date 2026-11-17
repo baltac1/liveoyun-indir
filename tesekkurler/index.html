@@ -110,6 +110,8 @@
           <li><a href="/oyunlar/halay/">Halay</a></li>
           <li><a href="/oyunlar/viyana/">Viyana'yı Fethet</a></li>
           <li><a href="/oyunlar/slime/">Köy Evinde Slime</a></li>
+          <li><a href="/oyunlar/sokak/">Sokak Yarışı</a></li>
+          <li><a href="/oyunlar/at/">At Yarışı</a></li>
           <li><a href="/oyunlar/paket/">3'lü Paket</a></li>
           <li><a href="/rehber/">Kurulum Rehberi</a></li>
         </ul>
@@ -137,12 +139,15 @@
 (function(){
   var NAMES={
     'prod_66ozQx55y8SGNbSNHaFvP3':'halay','prod_48KMaS36VNyVpEJ9Dkxgg8':'viyana',
-    'prod_3cHKDXOHkna49g6EiFPeoQ':'slime','prod_5EFwT8NFSAWcIWokVneGpk':'paket'
+    'prod_3cHKDXOHkna49g6EiFPeoQ':'slime','prod_5EFwT8NFSAWcIWokVneGpk':'paket',
+    'prod_4rsQSETcizrIoSVlucp2MF':'sokak','prod_Eqib0QDPLILNz2TGuorrz':'at'
   };
   var GAME={
     halay:{t:'Halay',say:'Hediye atan halaya katılıyor! En çok atan 10 dakika Halay Başı oluyor, haydi bakalım kim olacak?'},
     viyana:{t:"Viyana'yı Fethet",say:'Her hediye bir asker! Kaleyi birlikte düşürelim, en çok atan 10 dakika Ordu Komutanı oluyor!'},
     slime:{t:'Köy Evinde Slime',say:'Her hediye leğene malzeme döküyor! Slime taşana kadar devam, en çok atan 10 dakika Leğen Başı!'},
+    sokak:{t:'Sokak Yarışı',say:'Sohbete !katil yaz, ücretsiz arabayla yarışa gir! Garajda hediye atan daha havalı araba açıyor, yarışta aynı hediye nitroyu yakıyor. Arabalar eşit, nitro sınırlı!'},
+    at:{t:'At Yarışı',say:'Sohbete !katil yaz, atın ücretsiz starta gelsin! İlk 30 saniyede atılan her hediye atına depar attırıyor. Bütün atlar eşit, kazananı yarış belirliyor!'},
     paket:{t:'3 oyun',say:'Bugün yayında oyun var! Hediye atan oyuna katılıyor, en çok atan 10 dakika lider oluyor!'}
   };
   var q=new URLSearchParams(location.search), g=GAME[NAMES[q.get('product_id')]||''];
